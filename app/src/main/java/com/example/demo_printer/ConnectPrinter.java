@@ -41,6 +41,7 @@ public class ConnectPrinter extends AppCompatActivity {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothPort bluetoothPort;
     private Vector<BluetoothDevice> remoteDevices;
+    private Thread hThread;
 
 
     //componentes
@@ -49,6 +50,7 @@ public class ConnectPrinter extends AppCompatActivity {
     private Button conectarButton;
     private ListView impesoras;
     private TextView cogigo;
+    private TextView status;
 
     private void bluetoothSetup()
     {
@@ -98,6 +100,7 @@ public class ConnectPrinter extends AppCompatActivity {
         setContentView(R.layout.activity_connect_printer);
 
         cogigo = (TextView) findViewById(R.id.device_concect);
+        status = (TextView) findViewById(R.id.status);
         conectarButton =(Button) findViewById(R.id.decelerate);
         impesoras = findViewById(R.id.impresoras);
         imprimirButton = (Button) findViewById(R.id.imprimir);
@@ -156,14 +159,19 @@ public class ConnectPrinter extends AppCompatActivity {
 
         if(bluetoothPort.isConnected()){
             try {
-                bluetoothPort.connect(btDev.getAddress());
+                bluetoothPort.connect(btDev);
+                RequestHandlerON();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }else{
             try {
+
                 bluetoothPort.disconnect();
-                bluetoothPort.connect(btDev.getAddress());
+                RequestHandlerOFF();
+
+                bluetoothPort.connect(btDev);
+                RequestHandlerON();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -205,23 +213,53 @@ public class ConnectPrinter extends AppCompatActivity {
 
     }
 
+    void RequestHandlerON(){
+        RequestHandler rh = new RequestHandler();
+        hThread = new Thread(rh);
+        hThread.start();
+    }
 
+    void RequestHandlerOFF(){
+        if((hThread != null) && (hThread.isAlive()))
+            hThread.interrupt();
+    }
 
-
-
+/*
  void pirnt(){
-     CPCL cpcl = new CPCL();
-     cpcl.selectContinuousPaper();
-     boolean con = bluetoothPort.isConnected();
-    int chec = cpcl.printerCheck();
-    int stat = cpcl.status();
-     try {
-         cpcl.barcode4(1);
-     } catch (UnsupportedEncodingException e) {
-         e.printStackTrace();
-     }
- }
-    public void conct(View v){
+    boolean con = bluetoothPort.isConnected();
+    if(con){
+        CPCL cpcl = new CPCL();
+        cpcl.selectContinuousPaper();
+        int stat = cpcl.status();
+        status.setText("estatus: "+stat);
+        try {
+            if(stat ==0)
+                cpcl.personal(1);
+            //cpcl.barcode4(1);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+ }*/
+
+
+void pirnt(){
+    ESCPSample sample = new ESCPSample();
+    sample.propio();
+   /* try {
+        sample.barcodesample();
+    } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+    }*/
+}
+
+
+
+
+ public void conct(View v){
 
         if(bluetoothPort.isConnected()) {
             try {
@@ -252,7 +290,7 @@ public class ConnectPrinter extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        RequestHandlerOFF();
         try {
             bluetoothPort.disconnect();
         } catch (IOException e) {

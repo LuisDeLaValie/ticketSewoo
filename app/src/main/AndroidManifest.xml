@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
- M        <activity android:name=".MainActivity2" />
+       <activity android:name=".MainActivity2" />
         <activity
             android:name=".ConnectPrinter"
             android:label="@string/app_name"

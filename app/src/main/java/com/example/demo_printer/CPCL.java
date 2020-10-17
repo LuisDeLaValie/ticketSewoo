@@ -10,6 +10,8 @@ import com.sewoo.jpos.command.CPCLConst;
 import com.sewoo.jpos.command.ESCPOSConst;
 import com.sewoo.jpos.printer.CPCLPrinter;
 
+
+
 public class CPCL
 {
     protected CPCLPrinter cpclPrinter;
@@ -45,6 +47,207 @@ public class CPCL
     {
         paperType = CPCLConst.LK_CPCL_CONTINUOUS;
     }
+
+
+    public void personal(int count) throws IOException {
+
+        int saltos=25, saltotitulo=60,saltonuevo=80;
+
+        String[][] lista ={
+                {"Sep/2020","489","573","37"},
+                {"Sep/2020","489","573","37"},
+                {"Sep/2020","489","573","37"},
+                {"Sep/2020","489","573","37"}
+        };
+
+        int height=2050+(25*(lista.length+1));
+       //cpclPrinter.setForm(0, 200, 200, 400, count);
+       cpclPrinter.setForm(0, 200, 200, height, count);
+        cpclPrinter.setMedia(paperType);
+
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_CENTER);
+        multilie(0,50,"Comicion muntermunicipal de agua potable y alcantarillado de los Municipio de colima y villa de alvares",25);
+
+        simpletitle(0,200,"Estado de Cuneta");
+
+        int y1=260;
+        titleText(0,y1,"Usuario");
+        doble(0,(y1+=saltotitulo),"Jose Antonio Martinez Aguilar","");
+        multilie(0,(y1+=saltos),"Manuel velazquez 422 COl.El Diezmo mercedez zamora y gral jose juan ortega colima, col",25);
+        multilie(0,(y1+=saltos*3),"Mercedez zamora y gral jose juan ortega colima, col",25);
+
+        int y2=y1+saltonuevo;
+        titleText(0,y2,"Datos Del Predio");
+        doble(0,(y2+=saltotitulo),"Clave Catastral: ","");
+        textleft(25,(y2+saltos),"");
+        doble(0,(y2+=saltos*2),"Localizacion: ","");
+        textleft(25,(y2+saltos),"00-000-000");
+        doble(0,(y2+=saltos*2),"Grupo Facuracion: ","");
+        textleft(25,(y2+saltos),"3");
+        doble(0,(y2+=saltos*2),"Tipo de Cobro: ","");
+        textleft(25,(y2+saltos),"Servicio medido");
+        doble(0,(y2+=saltos*2),"No.Medidor: ","");
+        textleft(25,(y2+saltos),"000000000");
+        doble(0,(y2+=saltos*2),"tipo Descuento: ","");
+        textleft(25,(y2+saltos),"______________________");
+        doble(0,(y2+=saltos*2),"Perido de adeudo: ","");
+        textleft(25,(y2+saltos),"Dic 2019-Sep 2020");
+        doble(0,(y2+=saltos*2),"Bimestre Actual: ","");
+        textleft(25,(y2+saltos),"Sep 2020-Oct 2020");
+
+        int y3=y2+saltonuevo;
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        titleText(0,y3,"Facturacion");
+        titulotable((y3+=saltotitulo),"periodo","la m3", "la m3", "co m3");
+        for (int i = 0; i < lista.length ; i++) {
+            conttable((y3+=saltos),lista[i][0],lista[i][1],lista[i][2],lista[i][3]);
+        }
+
+
+        int y4=y3+saltonuevo;
+        titleText(0,y4,"Concepto");
+        textleft(0,(y4+=saltotitulo),"Cargos por ");
+        textleft(0,(y4+=saltos),"derondeo");
+        textright(0,(y4),"0.10");
+        textleft(0,(y4+=saltos+10),"servicio de");
+        textleft(0,(y4+=saltos),"agua potable");
+        textright(0,(y4),"216.08");
+        textleft(0,(y4+=saltos+10),"servicio de");
+        textleft(0,(y4+=saltos),"drenaje");
+        textright(0,(y4),"108.04");
+        textleft(0,(y4+=saltos+10),"servicio de");
+        textleft(0,(y4+=saltos),"saneamiento");
+        textright(0,(y4),"53.83");
+        textleft(0,(y4+=saltos+10),"Descuento por");
+        textleft(0,(y4+=saltos),"pago anticipado");
+        textright(0,(y4),"-30.88");
+        textleft(0,(y4+=saltos+10),"Aplicacion saldo");
+        textleft(0,(y4+=saltos),"a favor");
+        textright(0,(y4),"-347.17");
+        textleft(0,(y4+=saltos+10),"IVA en su pago");
+        textright(0,(y4),"-23.83");
+        textleft(0,(y4+=saltos+10),"Crédito por");
+        textleft(0,(y4+=saltos),"redondeo siguinte ");
+        textleft(0,(y4+=saltos),"recivo");
+        textright(0,(y4),"-0.06");
+        textleft(0,(y4+=saltos+10),"IVA Factura");
+        textright(0,(y4),"23.83");
+
+        int y5=y4+50;
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        doble(0,y5,"Audedo del periodo","");
+        simpletitle(0,(y5+=saltos),"$0.00");
+
+        int y6=y5+75;
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        doble(0,y6,"pagar antes del","");
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_RIGHT);
+        textright(0,(y6),"06/11/2020");
+
+
+        int y7=y6+35;
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        doble(0,y7,"CIE: ","1220845");
+        doble(0,(y7+=saltos),"Contrato: ","0000000000000");
+
+
+        int y8=y7+50;
+        qr(100,y8,"hola");
+        cpclPrinter.printForm();
+    }
+
+    int sizefont=3;
+
+    void doble(int x, int y, String s1, String s2){
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        cpclPrinter.setConcat(CPCLConst.LK_CPCL_CONCAT, x, y);
+        cpclPrinter.concatText(5, 0, 0, s1);
+        cpclPrinter.concatText(0, sizefont, 0, s2);
+        cpclPrinter.resetConcat();
+    }
+
+
+    void doble2(int x, int y, String s1, String s2){
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        multilie(x,y,s1,15);
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_RIGHT);
+        text(x,y,s2);
+    }
+
+    void multilie(int x, int y,String s, int leng){
+        String [] tex = s.split(" ");
+        String nuevo="";
+        int cont =0,cont2=0;
+        for (int i = 0; i < tex.length; i++) {
+
+            cont+=tex[i].length()+1;
+            if(cont > leng){
+                nuevo+="\n\n\n\n\n\n";
+                cont2++;
+                cont=tex[i].length()+1;
+            }
+            nuevo+=tex[i]+" ";
+        }
+        cpclPrinter.setMultiLine(cont2);
+        cpclPrinter.multiLineText(0,0,sizefont,x,y);
+        cpclPrinter.multiLineData(nuevo);
+        cpclPrinter.resetMultiLine();
+    }
+
+    void text(int x, int y,String s){
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_CENTER);
+        cpclPrinter.printCPCLText(0, 0,sizefont,x, y, s, 0);
+    }
+    void textleft(int x, int y,String s){
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        cpclPrinter.printCPCLText(0, 0,sizefont,x, y, s, 0);
+    }
+    void textright(int x, int y,String s){
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_RIGHT);
+        cpclPrinter.printCPCLText(0, 0,sizefont,x, y, s, 0);
+    }
+
+    void titleText(int x, int y, String s){
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_CENTER);
+        cpclPrinter.printCPCLText(0, 5,1,x, y, s, 0);
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_LEFT);
+        //cpclPrinter.printLine(50,y+40,350,y+40,2);
+        cpclPrinter.printBox(0,y-5,380,y+45,2);
+
+    }
+
+    void simpletitle(int x, int y, String s){
+        cpclPrinter.setJustification(CPCLConst.LK_CPCL_CENTER);
+        cpclPrinter.printCPCLText(0, 5,1,x, y, s, 0);
+    }
+
+
+
+    void titulotable(int y,String s1,String s2, String s3, String s4){
+        cpclPrinter.printCPCLText(0, 5,0,0, y, s1, 0);
+        cpclPrinter.printCPCLText(0, 5,0,140, y, s2, 0);
+        cpclPrinter.printCPCLText(0, 5,0,210, y, s3, 0);
+        cpclPrinter.printCPCLText(0, 5,0,280, y, s4, 0);
+    }
+
+    void conttable(int y,String s1,String s2, String s3, String s4){
+        cpclPrinter.printCPCLText(0, 0,sizefont,0, y, s1, 0);
+        cpclPrinter.printCPCLText(0, 0,sizefont,140, y, s2, 0);
+        cpclPrinter.printCPCLText(0, 0,sizefont,210, y, s3, 0);
+        cpclPrinter.printCPCLText(0, 0,sizefont,280, y, s4, 0);
+    }
+
+    void qr(int x, int y, String s){
+        cpclPrinter.printCPCL2DBarCode(0, CPCLConst.LK_CPCL_BCS_QRCODE, x, y, 5, 0, 1, 0, s);
+    }
+
+
+
+
+
+
+
+
 
     public void image3(int count) throws IOException
     {
@@ -87,7 +290,7 @@ public class CPCL
         cpclPrinter.setForm(0, 200, 200, 600, count);
         cpclPrinter.setMedia(paperType);
         // Image
-        cpclPrinter.printBitmap("//sdcard//temp//test//Sewoo_bw_m.jpg", 130, 10);
+        //cpclPrinter.printBitmap("", 130, 10);
         cpclPrinter.printCPCLText(0, 5, 2, 130, 140, "SEWOO TECH CO.,LTD.", 0);
         cpclPrinter.printCPCLText(0, 0, 3, 130, 210, "Dalim Plaza 304, 1027-20,", 0);
         cpclPrinter.printCPCLText(0, 0, 3, 130, 250, "Hogye-dong, Dongan-gu, Anyang-si,", 0);
@@ -98,7 +301,6 @@ public class CPCL
         cpclPrinter.printCPCL2DBarCode(0, CPCLConst.LK_CPCL_BCS_QRCODE, 130, 400, 5, 0, 1, 0, "http://www.miniprinter.com");
         cpclPrinter.printCPCLText(CPCLConst.LK_CPCL_0_ROTATION, 7, 1, 310, 400, "www.miniprinter.com", 0);
         cpclPrinter.printCPCLText(CPCLConst.LK_CPCL_0_ROTATION, 1, 1, 310, 470, "<-- Check This.", 0);
-        cpclPrinter.printForm();
 
     }
 
