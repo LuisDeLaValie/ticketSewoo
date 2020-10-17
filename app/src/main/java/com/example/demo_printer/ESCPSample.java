@@ -61,21 +61,21 @@ public class ESCPSample
 
             titulo("Datos Del Predio");
             posPtr.lineFeed(1);
-            doble("Clave Catastral:","000-000-000");
+            doble4("Clave Catastral:","000-000-000");
             posPtr.lineFeed(1);
-            doble("Localizacion:","00-000-000");
+            doble4("Localizacion:","00-000-000");
             posPtr.lineFeed(1);
-            doble("Grupo Facuracion:","3");
+            doble4("Grupo Facuracion:","3");
             posPtr.lineFeed(1);
-            doble("Tipo de Cobro:","Servicio medido");
+            doble4("Tipo de Cobro:","Servicio medido");
             posPtr.lineFeed(1);
-            doble("No.Medidor:","000000000");
+            doble4("No.Medidor:","000000000");
             posPtr.lineFeed(1);
-            doble("tipo Descuento:","______________________");
+            doble4("tipo Descuento:","______________________");
             posPtr.lineFeed(1);
-            doble("Perido de adeudo:","Dic 2019-Sep 2020");
+            doble4("Perido de adeudo:","Dic 2019-Sep 2020");
             posPtr.lineFeed(1);
-            doble("Bimestre Actual:","Sep 2020-Oct 2020");
+            doble4("Bimestre Actual:","Sep 2020-Oct 2020");
             posPtr.lineFeed(2);
 
             titulo("Facturacion");
@@ -152,16 +152,17 @@ public class ESCPSample
     void textRight(String s) throws UnsupportedEncodingException {
         posPtr.printText(s,LKPrint.LK_ALIGNMENT_RIGHT,LKPrint.LK_FNT_DEFAULT,LKPrint.LK_TXT_1WIDTH);
     }
-    void doble(String s1,String s2) throws UnsupportedEncodingException {
-        posPtr.printText(s1,LKPrint.LK_ALIGNMENT_LEFT,LKPrint.LK_FNT_BOLD,LKPrint.LK_TXT_1WIDTH);
-        posPtr.printText(s2,LKPrint.LK_ALIGNMENT_RIGHT,LKPrint.LK_FNT_DEFAULT,LKPrint.LK_TXT_1WIDTH);
 
-    }
     void titulo(String s) throws UnsupportedEncodingException {
         posPtr.printText(s,LKPrint.LK_ALIGNMENT_CENTER,LKPrint.LK_FNT_FONTB,LKPrint.LK_TXT_2WIDTH);
     }
     void titulo2(String s) throws UnsupportedEncodingException {
       posPtr.printText(s,LKPrint.LK_ALIGNMENT_CENTER,LKPrint.LK_FNT_DEFAULT,LKPrint.LK_TXT_2HEIGHT);
+    }
+    void doble(String s1,String s2) throws UnsupportedEncodingException {
+        posPtr.printText(s1,LKPrint.LK_ALIGNMENT_LEFT,LKPrint.LK_FNT_BOLD,LKPrint.LK_TXT_1WIDTH);
+        posPtr.printText(s2,LKPrint.LK_ALIGNMENT_RIGHT,LKPrint.LK_FNT_DEFAULT,LKPrint.LK_TXT_1WIDTH);
+
     }
     void doble2(String s1, String s2)throws UnsupportedEncodingException {
         int leng = 32, maxleng=19;
@@ -233,6 +234,12 @@ public class ESCPSample
             text+=s2;
             textLeft(text);
         }
+
+    }
+    void doble4(String s1,String s2) throws UnsupportedEncodingException {
+        posPtr.printText(s1,LKPrint.LK_ALIGNMENT_LEFT,LKPrint.LK_FNT_BOLD,LKPrint.LK_TXT_1WIDTH);
+        posPtr.lineFeed(1);
+        posPtr.printText("  "+s2,LKPrint.LK_ALIGNMENT_LEFT,LKPrint.LK_FNT_DEFAULT,LKPrint.LK_TXT_1WIDTH);
 
     }
     void barcode(String s) throws UnsupportedEncodingException{
