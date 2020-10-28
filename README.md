@@ -1,4 +1,4 @@
 # ticketSewoo
 
 
-ver archivos ConnectPrinter y 
+ver archivos ConnectPrinter y ESCPSample
