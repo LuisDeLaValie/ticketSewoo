@@ -21,7 +21,6 @@ public class ESCPSample
     private final char ESC = ESCPOS.ESC;
     private final char LF = ESCPOS.LF;
 
-    private ChkPrinterStatus	chkStatus;
     private int sts;
 
 
@@ -31,7 +30,6 @@ public class ESCPSample
 //		posPtr = new ESCPOSPrinter("EUC-KR"); // Korean.
 //		posPtr = new ESCPOSPrinter("BIG5"); // Big5
         posImg = new ESCPOSImage();
-        chkStatus = new ChkPrinterStatus();
     }
 
 
