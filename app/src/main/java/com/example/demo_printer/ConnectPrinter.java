@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -224,67 +225,20 @@ public class ConnectPrinter extends AppCompatActivity {
             hThread.interrupt();
     }
 
-/*
- void pirnt(){
-    boolean con = bluetoothPort.isConnected();
-    if(con){
-        CPCL cpcl = new CPCL();
-        cpcl.selectContinuousPaper();
-        int stat = cpcl.status();
-        status.setText("estatus: "+stat);
-        try {
-            if(stat ==0)
-                cpcl.personal(1);
-            //cpcl.barcode4(1);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
- }*/
-
 
 void pirnt(){
     ESCPSample sample = new ESCPSample();
     sample.propio();
-   /* try {
+
+
+     /*try {
         sample.barcodesample();
-    } catch (UnsupportedEncodingException e) {
+    } catch (IOException e) {
         e.printStackTrace();
     }*/
 }
 
 
-
-
- public void conct(View v){
-
-        if(bluetoothPort.isConnected()) {
-            try {
-                bluetoothPort.disconnect();
-                bluetoothPort.connect("88:6B:0F:DD:6B:C9");
-                int mod=bluetoothPort.getModel();
-                pirnt();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }else{
-            try {
-                bluetoothPort.connect("88:6B:0F:DD:6B:C9");
-                int mod=bluetoothPort.getModel();
-                pirnt();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-
-    }
 
 
     @Override

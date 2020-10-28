@@ -4,7 +4,7 @@ package com.example.demo_printer;
 import com.sewoo.jpos.command.ESCPOSConst;
 import com.sewoo.jpos.printer.ESCPOSPrinter;
 
-public class ChkPrinterStatus {
+public class ChkPrinterStatusa {
 
     private int returnValue;
 
