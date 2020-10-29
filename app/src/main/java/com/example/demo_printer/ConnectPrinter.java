@@ -34,9 +34,6 @@ import java.util.Vector;
 
 public class ConnectPrinter extends AppCompatActivity {
 
-
-
-
     //asd
     private ArrayAdapter<String> adapter;
     private BluetoothAdapter bluetoothAdapter;
@@ -52,6 +49,42 @@ public class ConnectPrinter extends AppCompatActivity {
     private ListView impesoras;
     private TextView cogigo;
     private TextView status;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_connect_printer);
+
+        cogigo = (TextView) findViewById(R.id.device_concect);
+        status = (TextView) findViewById(R.id.status);
+        conectarButton =(Button) findViewById(R.id.decelerate);
+        impesoras = findViewById(R.id.impresoras);
+        imprimirButton = (Button) findViewById(R.id.imprimir);
+
+        bluetoothSetup();
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        impesoras.setAdapter(adapter);
+        addPairedDevices();
+
+        impesoras.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+            {
+                BluetoothDevice btDev = remoteDevices.elementAt(arg2);
+                if(bluetoothAdapter.isDiscovering())
+                {
+                    bluetoothAdapter.cancelDiscovery();
+                }
+                cogigo.setText(btDev.getAddress());
+                btConn(btDev);
+            }
+        });
+
+        registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+
+        buscar(new View(this));
+    }
 
     private void bluetoothSetup()
     {
@@ -88,45 +121,17 @@ public class ConnectPrinter extends AppCompatActivity {
             pairedDevice = iter.next();
             if(bluetoothPort.isValidAddress(pairedDevice.getAddress()))
             {
+                Log.e("paired",pairedDevice.getName() +" " + pairedDevice.getAddress());
                 remoteDevices.add(pairedDevice);
                 adapter.add(pairedDevice.getName() +"\n["+pairedDevice.getAddress()+"] [Paired]");
-            }
-        }
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connect_printer);
-
-        cogigo = (TextView) findViewById(R.id.device_concect);
-        status = (TextView) findViewById(R.id.status);
-        conectarButton =(Button) findViewById(R.id.decelerate);
-        impesoras = findViewById(R.id.impresoras);
-        imprimirButton = (Button) findViewById(R.id.imprimir);
-
-        bluetoothSetup();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        impesoras.setAdapter(adapter);
-        addPairedDevices();
-
-        impesoras.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-            {
-                BluetoothDevice btDev = remoteDevices.elementAt(arg2);
                 if(bluetoothAdapter.isDiscovering())
                 {
                     bluetoothAdapter.cancelDiscovery();
                 }
-                cogigo.setText(btDev.getAddress());
-                btConn(btDev);
+                cogigo.setText(pairedDevice.getAddress());
+                btConn(pairedDevice);
             }
-        });
-
-        registerReceiver(discoveryResult, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        }
     }
 
     public BroadcastReceiver discoveryResult = new BroadcastReceiver()
@@ -144,12 +149,18 @@ public class ConnectPrinter extends AppCompatActivity {
                 }
                 else
                 {
-                    key = remoteDevice.getName() +"\n["+remoteDevice.getAddress()+"] [Pairedd]";
+                    key = remoteDevice.getName() +"\n["+remoteDevice.getAddress()+"] [Paired]";
                 }
                 if(bluetoothPort.isValidAddress(remoteDevice.getAddress()))
                 {
                     remoteDevices.add(remoteDevice);
                     adapter.add(key);
+                    if(bluetoothAdapter.isDiscovering())
+                    {
+                        bluetoothAdapter.cancelDiscovery();
+                    }
+                    cogigo.setText(remoteDevice.getAddress());
+                    btConn(remoteDevice);
                 }
             }
         }
@@ -162,6 +173,7 @@ public class ConnectPrinter extends AppCompatActivity {
             try {
                 bluetoothPort.connect(btDev);
                 RequestHandlerON();
+                pirnt();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -173,6 +185,7 @@ public class ConnectPrinter extends AppCompatActivity {
 
                 bluetoothPort.connect(btDev);
                 RequestHandlerON();
+                pirnt();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
